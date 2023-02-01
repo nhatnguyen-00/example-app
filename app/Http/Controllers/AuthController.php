@@ -8,6 +8,7 @@ use App\Services\AuthService;
 use App\Repositories\UserRepository;
 use Illuminate\Http\JsonResponse;
 use Exception;
+use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
@@ -27,7 +28,7 @@ class AuthController extends Controller
 
             if (!$checkAuth) {
                 return response()->json([
-                    'status_code' => 500,
+                    'status' => 500,
                     'message' => 'Unauthorized'
                 ]);
             }
@@ -43,16 +44,26 @@ class AuthController extends Controller
             $tokenResult = $this->authService->createToken($user);
 
             return response()->json([
-                'status_code' => 200,
+                'status' => 200,
                 'access_token' => $tokenResult,
                 'token_type' => 'Bearer',
             ]);
-        } catch (\Exception $error) {
+        } catch (Exception $error) {
             return response()->json([
-                'status_code' => 500,
+                'status' => 500,
                 'message' => 'Error in Login',
                 'error' => $error,
             ]);
         }
+    }
+
+    public function logout(Request $request): JsonResponse
+    {
+        $this->authService->removeCurrentAccessToken($request->user());
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Successfully'
+        ]);
     }
 }

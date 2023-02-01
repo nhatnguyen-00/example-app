@@ -20,4 +20,9 @@ class AuthService
             'password' => $password,
         ]);
     }
+
+    public function removeCurrentAccessToken(User $user): void
+    {
+        $user->currentAccessToken()->delete();
+    }
 }
