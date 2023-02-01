@@ -49,11 +49,7 @@ class AuthController extends Controller
                 'token_type' => 'Bearer',
             ]);
         } catch (Exception $error) {
-            return response()->json([
-                'status' => 500,
-                'message' => 'Error in Login',
-                'error' => $error,
-            ]);
+            return responder()->getErr();
         }
     }
 
@@ -61,9 +57,6 @@ class AuthController extends Controller
     {
         $this->authService->removeCurrentAccessToken($request->user());
 
-        return response()->json([
-            'status' => 200,
-            'message' => 'Successfully'
-        ]);
+        return responder()->getSuccess();
     }
 }
