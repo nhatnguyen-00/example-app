@@ -6,3 +6,5 @@ down:
 	- docker-compose down
 connect-php:
 	- docker-compose run php sh
+route-list:
+	- docker-compose run php php artisan route:list
