@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
-use App\Models\User;
 use App\Services\AuthService;
 use App\Repositories\UserRepository;
 use Illuminate\Http\JsonResponse;
 use Exception;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
 {
@@ -27,10 +27,10 @@ class AuthController extends Controller
             $checkAuth = $this->authService->checkAccount($email, $password);
 
             if (!$checkAuth) {
-                return response()->json([
-                    'status' => 500,
-                    'message' => 'Unauthorized'
-                ]);
+                return responder()
+                    ->setCode(Response::HTTP_INTERNAL_SERVER_ERROR)
+                    ->setMsg('Unauthorized')
+                    ->get();
             }
 
             /** @var UserRepository $userRepository */
@@ -43,11 +43,11 @@ class AuthController extends Controller
 
             $tokenResult = $this->authService->createToken($user);
 
-            return response()->json([
-                'status' => 200,
-                'access_token' => $tokenResult,
-                'token_type' => 'Bearer',
-            ]);
+            return responder()
+                ->getSuccess([
+                    'access_token' => $tokenResult,
+                    'token_type' => 'Bearer'
+                ]);
         } catch (Exception $error) {
             return responder()->getErr();
         }

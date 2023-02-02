@@ -9,7 +9,10 @@ class ResponseService
 {
     private array $res;
 
-    public function __construct() {
+    public function __construct()
+    {
+        $this->res['data'] = [];
+        $this->res['msg'] = 'Successfully';
     }
 
     public function setCode(int $code): self
@@ -26,7 +29,7 @@ class ResponseService
         return $this;
     }
 
-    public function setData($data = []): self
+    public function setData(array $data = []): self
     {
         $this->res['data'] = $data;
 
@@ -35,8 +38,7 @@ class ResponseService
 
     public function setSuccess(): self
     {
-        $this->setCode(Response::HTTP_OK)
-            ->setMsg('Successfully');
+        $this->setCode(Response::HTTP_OK);
 
         return $this;
     }
@@ -54,7 +56,7 @@ class ResponseService
         return $this->setErr()->get();
     }
 
-    public function getSuccess($data = []): JsonResponse
+    public function getSuccess(array $data = []): JsonResponse
     {
         return $this->setSuccess()->setData($data)->get();
     }
