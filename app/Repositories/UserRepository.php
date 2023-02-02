@@ -9,8 +9,6 @@ use App\Base\Repository;
 
 class UserRepository extends Repository
 {
-    protected Model $model;
-
     public function model(): string
     {
         return User::class;
