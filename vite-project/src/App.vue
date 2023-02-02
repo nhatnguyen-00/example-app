@@ -1,16 +1,15 @@
-<script setup>
-  import HelloWorld from './components/HelloWorld.vue'
-  import { mapState} from 'vuex';
+<script>
+  import { mapState } from 'vuex';
   export default {
     computed: {
-      ...mapState(['user'])
+      ...mapState(['user', 'admin'])
     }
   }
 </script>
 
 <template>
   <div>
-      {{ user }}
+      {{ user }} {{ admin }}
   </div>
 </template>
 
