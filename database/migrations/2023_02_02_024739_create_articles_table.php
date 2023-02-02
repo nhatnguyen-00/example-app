@@ -19,6 +19,7 @@ return new class extends Migration
             $table->tinyInteger('status');
             $table->text('content');
             $table->integer('author_id');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -8,10 +8,11 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\Tag;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Article extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $table = 'articles';
 
@@ -29,6 +30,6 @@ class Article extends Model
 
     public function tags(): HasMany
     {
-        return $this->hasMany(User::class, 'tag_id');
+        return $this->hasMany(Tag::class, 'tag_id');
     }
 }
