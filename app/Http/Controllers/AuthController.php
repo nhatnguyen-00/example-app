@@ -37,10 +37,6 @@ class AuthController extends Controller
             $userRepository = app(UserRepository::class);
             $user = $userRepository->findByEmail($email);
 
-            // if (!Hash::check($request->password, $user->password, [])) {
-            //     throw new \Exception('Error in Login');
-            // }
-
             $tokenResult = $this->authService->createToken($user);
 
             return responder()
