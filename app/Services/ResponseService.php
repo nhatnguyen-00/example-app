@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ResponseService
 {
@@ -58,6 +59,21 @@ class ResponseService
 
     public function getSuccess(array $data = []): JsonResponse
     {
+        return $this->setSuccess()->setData($data)->get();
+    }
+
+    public function getPaginator(LengthAwarePaginator $paginator, string $resourceClass): JsonResponse
+    {
+        $data = [
+            'current_page' => $paginator->currentPage(),
+            'results' => $resourceClass::collection($paginator->getCollection()),
+            'from' => $paginator->firstItem(),
+            'last_page' => $paginator->lastPage(),
+            'per_page' => $paginator->perPage(),
+            'to' => $paginator->lastItem(),
+            'total' => $paginator->total(),
+        ];
+
         return $this->setSuccess()->setData($data)->get();
     }
 
