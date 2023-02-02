@@ -15,6 +15,10 @@ return new class extends Migration
     {
         Schema::create('articles', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
+            $table->tinyInteger('status');
+            $table->text('content');
+            $table->integer('author_id');
             $table->timestamps();
         });
     }
