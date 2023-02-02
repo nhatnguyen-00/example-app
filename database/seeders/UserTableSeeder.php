@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 
@@ -18,13 +18,13 @@ class UserTableSeeder extends Seeder
         User::create([
             'name' => 'first',
             'email' => 'first@test.test',
-            'password' => 'first',
+            'password' => Hash::make('first'),
         ]);
 
         User::create([
             'name' => 'second',
             'email' => 'second@test.test',
-            'password' => 'second',
+            'password' => Hash::make('second'),
         ]);
     }
 }

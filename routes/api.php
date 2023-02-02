@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\User\ArticleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,12 +21,17 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-Route::group(['prefix' => 'auth'], function()
+Route::group(['prefix' => 'user'], function()
 {
     Route::post('login', [AuthController::class, 'login']);
 });
 
-Route::group(['prefix' => 'auth', 'middleware' => 'auth:sanctum'], function()
+Route::group(['prefix' => 'user', 'middleware' => 'auth:user'], function()
 {
     Route::post('logout', [AuthController::class, 'logout']);
+
+    Route::group(['prefix' => 'article', 'middleware' => 'auth:user'], function()
+    {
+        Route::get('/', [ArticleController::class, 'index']);
+    });
 });

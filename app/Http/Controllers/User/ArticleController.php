@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use Illuminate\Http\Request;
 use App\Repositories\ArticleRepository;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Article\ArticleResource;
 
 class ArticleController extends Controller
 {
@@ -23,8 +24,9 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $userId = auth()->id;
-        $articles = $this->articleRepository->index($userId);
+        $articles = $this->articleRepository->getByAuthor(auth()->user());
+
+        return responder()->getPaginator($articles, ArticleResource::class);
     }
 
     /**
