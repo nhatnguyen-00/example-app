@@ -11,4 +11,9 @@ class ArticlePolicy
     {
         return optional($user)->id === $article->author_id;
     }
+
+    public function destroy(User $user, Article $article): bool
+    {
+        return optional($user)->id === $article->author_id;
+    }
 }

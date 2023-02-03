@@ -35,5 +35,6 @@ Route::group(['prefix' => 'user', 'middleware' => 'auth:user'], function()
         Route::get('/{article}', [ArticleController::class, 'show'])->middleware(['can:show,article']);
         Route::get('/', [ArticleController::class, 'index']);
         Route::post('/', [ArticleController::class, 'store']);
+        Route::delete('/{article}', [ArticleController::class, 'destroy'])->middleware(['can:destroy,article']);
     });
 });
