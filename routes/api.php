@@ -33,5 +33,6 @@ Route::group(['prefix' => 'user', 'middleware' => 'auth:user'], function()
     Route::group(['prefix' => 'article', 'middleware' => 'auth:user'], function()
     {
         Route::get('/', [ArticleController::class, 'index']);
+        Route::post('/', [ArticleController::class, 'store']);
     });
 });

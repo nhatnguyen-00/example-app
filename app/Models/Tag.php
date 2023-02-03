@@ -4,9 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\Article;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Tag extends Model
 {
@@ -15,18 +14,11 @@ class Tag extends Model
     protected $table = 'tags';
 
     protected $fillable = [
-        'user_id',
-        'article_id',
         'name',
     ];
 
-    public function user(): BelongsTo
+    public function article(): BelongsToMany
     {
-        return $this->belongsTo(User::class, 'user_id');
-    }
-
-    public function article(): BelongsTo
-    {
-        return $this->belongsTo(Article::class, 'article_id');
+        return $this->belongsToMany(Article::class, 'article_tag', 'tag_id', 'article_id');
     }
 }

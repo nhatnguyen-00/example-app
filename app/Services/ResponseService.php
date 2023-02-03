@@ -30,7 +30,7 @@ class ResponseService
         return $this;
     }
 
-    public function setData(array $data = []): self
+    public function setData($data = []): self
     {
         $this->res['data'] = $data;
 
@@ -57,7 +57,7 @@ class ResponseService
         return $this->setErr()->get();
     }
 
-    public function getSuccess(array $data = []): JsonResponse
+    public function getSuccess($data = []): JsonResponse
     {
         return $this->setSuccess()->setData($data)->get();
     }

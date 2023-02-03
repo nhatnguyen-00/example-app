@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Repositories\ArticleRepository;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Article\ArticleResource;
+use App\Http\Requests\ArticleStoreRequest;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\JsonResponse;
 
 class ArticleController extends Controller
 {
@@ -22,7 +25,7 @@ class ArticleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): JsonResponse
     {
         $articles = $this->articleRepository->getByAuthor(auth()->user());
 
@@ -35,9 +38,15 @@ class ArticleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ArticleStoreRequest $request): JsonResponse
     {
-        //
+        $article = DB::transaction(function () use ($request) {
+            return $this->articleRepository->store($request);
+        });
+
+        $resource = new ArticleResource($article);
+
+        return responder()->getSuccess($resource);
     }
 
     /**
