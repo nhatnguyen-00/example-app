@@ -4,6 +4,13 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -46,5 +53,43 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    public function render($request, Throwable $e)
+    {
+        $err = responder()->setData(null);
+
+        switch (true) {
+            case $e instanceof ModelNotFoundException:
+            case $e instanceof NotFoundHttpException:
+                return $err->setCode(Response::HTTP_NOT_FOUND)
+                    ->setMsg('Not found.')
+                    ->get();
+            case $e instanceof AuthenticationException:
+                return $err
+                    ->setCode(Response::HTTP_UNAUTHORIZED)
+                    ->setMsg($e->getMessage())
+                    ->get();
+            case $e instanceof AuthorizationException:
+                return $err->setCode(Response::HTTP_FORBIDDEN)
+                    ->setMsg('This action is unauthorized.')
+                    ->get();
+            case $e instanceof ValidationException:
+                return $err
+                    ->setMsg($e->getMessage())
+                    ->setData($e->errors())
+                    ->setCode(Response::HTTP_UNPROCESSABLE_ENTITY)
+                    ->get();
+            case $e instanceof MethodNotAllowedHttpException:
+                return $err
+                    ->setCode($e->getStatusCode())
+                    ->setMsg($e->getMessage())
+                    ->get();
+            default:
+                return $err
+                    ->setData(['exception' => get_class($e)])
+                    ->setMsg('Something went wrong.')
+                    ->get();
+        }
     }
 }
