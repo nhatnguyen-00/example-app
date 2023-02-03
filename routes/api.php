@@ -32,6 +32,7 @@ Route::group(['prefix' => 'user', 'middleware' => 'auth:user'], function()
 
     Route::group(['prefix' => 'article', 'middleware' => 'auth:user'], function()
     {
+        Route::get('/{article}', [ArticleController::class, 'show'])->middleware(['can:show,article']);
         Route::get('/', [ArticleController::class, 'index']);
         Route::post('/', [ArticleController::class, 'store']);
     });

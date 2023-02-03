@@ -37,4 +37,9 @@ class ArticleRepository extends Repository
 
         return $article;
     }
+
+    public function show(int $id): Article
+    {
+        return $this->model->find($id)->load('tags:id,name');
+    }
 }

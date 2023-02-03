@@ -3,7 +3,7 @@
 namespace App\Http\Resources\Article;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Models\Article;
+use App\Http\Resources\Tag\TagResource;
 
 class ArticleResource extends JsonResource
 {
@@ -13,7 +13,7 @@ class ArticleResource extends JsonResource
      * @param  \Illuminate\Http\Request  $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         $data = [
             'id' => $this->getKey(),
@@ -24,6 +24,9 @@ class ArticleResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
+        if ($this->relationLoaded('tags')) {
+            $data['tags'] = TagResource::collection($this->tags);
+        }
 
         return $data;
     }

@@ -9,6 +9,7 @@ use App\Http\Resources\Article\ArticleResource;
 use App\Http\Requests\ArticleStoreRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\JsonResponse;
+use App\Models\Article;
 
 class ArticleController extends Controller
 {
@@ -49,15 +50,11 @@ class ArticleController extends Controller
         return responder()->getSuccess($resource);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function show(Article $article): JsonResponse
     {
-        //
+        $resource = new ArticleResource($article->load('tags:id,name'));
+
+        return responder()->getSuccess($resource);
     }
 
     /**
