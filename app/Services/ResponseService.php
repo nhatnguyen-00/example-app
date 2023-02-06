@@ -79,6 +79,6 @@ class ResponseService
 
     public function get(): JsonResponse
     {
-        return response()->json($this->res);
+        return response()->json($this->res, $this->res['code']);
     }
 }
