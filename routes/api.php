@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\User\ArticleController;
+use App\Http\Controllers\User\CommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,5 +37,10 @@ Route::group(['prefix' => 'user', 'middleware' => 'auth:user'], function()
         Route::get('/', [ArticleController::class, 'index']);
         Route::post('/', [ArticleController::class, 'store']);
         Route::delete('/{article}', [ArticleController::class, 'destroy'])->middleware(['can:destroy,article']);
+
+        Route::group(['prefix' => '{article}/comment'], function()
+        {
+            Route::post('/', [CommentController::class, 'store']);
+        });
     });
 });

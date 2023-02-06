@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Resources\Article;
+namespace App\Http\Resources\Comment;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\Tag\TagResource;
 use App\Http\Resources\User\UserResource;
 
-class ArticleResource extends JsonResource
+class CommentResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,15 +17,14 @@ class ArticleResource extends JsonResource
     {
         $data = [
             'id' => $this->getKey(),
-            'status' => $this->status,
-            'title' => $this->title,
             'content' => $this->content,
+            'parent_id' => $this->parent_id,
             'author_id' => $this->author_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
-        if ($this->relationLoaded('tags')) {
-            $data['tags'] = TagResource::collection($this->tags);
+        if ($this->relationLoaded('comments')) {
+            $data['comments'] = CommentResource::collection($this->comments);
         }
         if ($this->relationLoaded('author')) {
             $data['author'] = new UserResource($this->author);

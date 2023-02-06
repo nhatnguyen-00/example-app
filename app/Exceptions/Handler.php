@@ -11,6 +11,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 class Handler extends ExceptionHandler
 {
@@ -62,6 +63,7 @@ class Handler extends ExceptionHandler
         switch (true) {
             case $e instanceof ModelNotFoundException:
             case $e instanceof NotFoundHttpException:
+            case $e instanceof RouteNotFoundException:
                 return $err->setCode(Response::HTTP_NOT_FOUND)
                     ->setMsg('Not found.')
                     ->get();
