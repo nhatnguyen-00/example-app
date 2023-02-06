@@ -41,6 +41,7 @@ Route::group(['prefix' => 'user', 'middleware' => 'auth:user'], function()
         Route::group(['prefix' => '{article}/comment'], function()
         {
             Route::post('/', [CommentController::class, 'store']);
+            Route::put('/{comment}', [CommentController::class, 'update']);
         });
     });
 });
