@@ -95,10 +95,15 @@
 
     function login(ev) {
         ev.preventDefault();
-        store.dispatch('login', user).then(() => {
-            router.push({
-                name: 'Dashboard',
+        store
+            .dispatch('login', user)
+            .then(() => {
+                router.push({
+                    name: 'Dashboard',
+                });
+            })
+            .catch((e) => {
+                console.log(e);
             });
-        });
     }
 </script>

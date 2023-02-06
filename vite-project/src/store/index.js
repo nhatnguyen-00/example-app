@@ -21,15 +21,24 @@ const store = createStore({
                 return data;
             });
         },
+
+        logout: ({ commit }, user) => {
+            return axiosClient.post('/logout', user).then(({ data }) => {
+                commit('logout', data);
+                return data;
+            });
+        },
     },
     mutations: {
         logout: (state) => {
             state.user.token = null;
             state.user.data = {};
+            console.log(state);
+            sessionStorage.removeItem('TOKEN');
         },
         setUser: (state, userData) => {
             state.user.data = userData.user;
-            state.user.token = userData.token;
+            state.user.token = userData.data.access_token;
             sessionStorage.setItem('TOKEN', state.user.token);
         },
     },

@@ -75,6 +75,7 @@
                                                     active ? 'bg-gray-100' : '',
                                                     'block px-4 py-2 text-sm text-gray-700',
                                                 ]"
+                                                v-on:click="item.event"
                                                 >{{ item.name }}</a
                                             >
                                         </MenuItem>
@@ -144,7 +145,7 @@
             </DisclosurePanel>
         </Disclosure>
 
-       <router-view></router-view>
+        <router-view></router-view>
     </div>
 </template>
 
@@ -159,6 +160,9 @@
         MenuItems,
     } from '@headlessui/vue';
     import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline';
+    import store from '../store';
+    import { useRouter } from 'vue-router';
+    const router = useRouter();
 
     const user = {
         name: 'Tom Cook',
@@ -176,6 +180,14 @@
     const userNavigation = [
         { name: 'Your Profile', href: '#' },
         { name: 'Settings', href: '#' },
-        { name: 'Sign out', href: '#' },
+        { name: 'Sign out', href: '#', event: logout },
     ];
+
+    function logout(e) {
+        e.preventDefault();
+        console.log('ádasd');
+        store.dispatch('logout', user).then(() => {
+            router.push({ name: 'login' });
+        });
+    }
 </script>
