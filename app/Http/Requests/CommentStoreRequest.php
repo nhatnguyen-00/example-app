@@ -23,11 +23,18 @@ class CommentStoreRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'parent_id' => 'nullable|integer',
+        $validator = [
             'author_id' => 'required|integer',
             'content' => 'required|string',
         ];
+
+        if ($this->parent_id === 0) {
+            $validator['parent_id'] = 'nullable|integer';
+        } else {
+            $validator['parent_id'] = 'nullable|integer|exists:comments,id';
+        }
+
+        return $validator;
     }
 
     protected function prepareForValidation(): void

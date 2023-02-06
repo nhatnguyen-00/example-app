@@ -41,4 +41,11 @@ class CommentController extends Controller
 
         return responder()->getSuccess($resource);
     }
+
+    public function destroy(Request $request, Article $article, Comment $comment): JsonResponse
+    {
+        $comment->delete();
+
+        return responder()->getSuccess();
+    }
 }
