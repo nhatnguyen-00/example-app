@@ -22,14 +22,21 @@ class Comment extends Model
         'author_id',
     ];
 
+    const PARENT_COMMENT_DEFAULT = 0;
+
     public function author(): BelongsTo
     {
         return $this->belongsTo(User::class, 'author_id');
     }
 
-    public function comments(): HasMany
+    public function children(): HasMany
     {
-        return $this->hasMany(Comment::class, 'parent_id');
+        return $this->hasMany(self::class, 'parent_id');
+    }
+
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(self::class, 'parent_id');
     }
 
     public function commentable(): MorphTo

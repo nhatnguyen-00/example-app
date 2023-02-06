@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Comment;
 
 class CommentStoreRequest extends FormRequest
 {
@@ -28,7 +29,7 @@ class CommentStoreRequest extends FormRequest
             'content' => 'required|string',
         ];
 
-        if ($this->parent_id === 0) {
+        if ($this->parent_id === Comment::PARENT_COMMENT_DEFAULT) {
             $validator['parent_id'] = 'nullable|integer';
         } else {
             $validator['parent_id'] = 'nullable|integer|exists:comments,id';
@@ -41,7 +42,7 @@ class CommentStoreRequest extends FormRequest
     {
         $this->merge([
             'author_id' => auth()->id(),
-            'parent_id' => $this->request->get('parent_id') ?? 0
+            'parent_id' => $this->request->get('parent_id') ?? Comment::PARENT_COMMENT_DEFAULT
         ]);
     }
 }

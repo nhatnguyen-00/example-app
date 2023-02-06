@@ -21,11 +21,6 @@ class ArticleController extends Controller
         $this->articleRepository = $articleRepository;
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(): JsonResponse
     {
         $articles = $this->articleRepository->getByAuthor(auth()->user());
@@ -33,12 +28,6 @@ class ArticleController extends Controller
         return responder()->getPaginator($articles, ArticleResource::class);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(ArticleStoreRequest $request): JsonResponse
     {
         $article = DB::transaction(function () use ($request) {
@@ -52,18 +41,13 @@ class ArticleController extends Controller
 
     public function show(Article $article): JsonResponse
     {
-        $resource = new ArticleResource($article->load('tags:id,name'));
+        $article = $this->articleRepository->show($article);
+
+        $resource = new ArticleResource($article);
 
         return responder()->getSuccess($resource);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         //

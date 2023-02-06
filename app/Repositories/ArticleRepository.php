@@ -8,6 +8,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use App\Base\Repository;
 use Illuminate\Http\Request;
 use App\Repositories\TagRepository;
+use App\Models\Comment;
 
 class ArticleRepository extends Repository
 {
@@ -38,8 +39,14 @@ class ArticleRepository extends Repository
         return $article;
     }
 
-    public function show(int $id): Article
+    public function show(Article $article): Article
     {
-        return $this->model->find($id)->load('tags:id,name');
+        return $article->load([
+            'comments' => function ($query) {
+                return $query->where('parent_id', Comment::PARENT_COMMENT_DEFAULT)
+                    // max 3 generations
+                    ->with('children.children.children');
+            }
+        ]);
     }
 }
