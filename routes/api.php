@@ -41,8 +41,8 @@ Route::group(['prefix' => 'user', 'middleware' => 'auth:user'], function()
         Route::group(['prefix' => '{article}/comment'], function()
         {
             Route::post('/', [CommentController::class, 'store']);
-            Route::put('/{comment}', [CommentController::class, 'update']);
-            Route::delete('/{comment}', [CommentController::class, 'destroy']);
+            Route::put('/{comment}', [CommentController::class, 'update'])->middleware(['can:update,comment']);
+            Route::delete('/{comment}', [CommentController::class, 'destroy'])->middleware(['can:destroy,comment']);
         });
     });
 });
