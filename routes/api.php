@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\User\ArticleController;
 use App\Http\Controllers\User\CommentController;
+use App\Http\Controllers\User\VoteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,6 +45,13 @@ Route::group(['prefix' => 'user', 'middleware' => 'auth:user'], function()
             Route::post('/', [CommentController::class, 'store']);
             Route::put('/{comment}', [CommentController::class, 'update'])->middleware(['can:update,comment']);
             Route::delete('/{comment}', [CommentController::class, 'destroy'])->middleware(['can:destroy,comment']);
+        });
+
+        Route::group(['prefix' => '{article}'], function()
+        {
+            Route::post('upvote', [VoteController::class, 'upvote']);
+            Route::post('downvote', [VoteController::class, 'downvote']);
+            Route::post('reset-vote', [VoteController::class, 'resetVote']);
         });
     });
 });

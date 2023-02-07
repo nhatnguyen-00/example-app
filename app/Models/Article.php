@@ -10,6 +10,7 @@ use App\Models\Tag;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use App\Models\Comment;
+use App\Models\Vote;
 
 class Article extends Model
 {
@@ -41,5 +42,10 @@ class Article extends Model
     public function comments()
     {
         return $this->morphMany(Comment::class, 'commentable');
+    }
+
+    public function votes()
+    {
+        return $this->hasMany(Vote::class, 'article_id');
     }
 }
