@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Article;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Bookmark extends Model
 {
@@ -20,4 +22,8 @@ class Bookmark extends Model
     const BOOKMARK_STATUS = 1;
     const UN_BOOKMARK_STATUS = 0;
 
+    public function article(): BelongsTo
+    {
+        return $this->belongsTo(Article::class, 'article_id');
+    }
 }

@@ -6,12 +6,21 @@ use App\Base\Repository;
 use App\Models\Article;
 use App\Models\Bookmark;
 use App\Models\User;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class BookmarkRepository extends Repository
 {
     public function model(): string
     {
         return Bookmark::class;
+    }
+
+    public function listByUser(User $user): LengthAwarePaginator
+    {
+        return $user->bookmarks()
+            ->where('status', Bookmark::BOOKMARK_STATUS)
+            ->with(['article.author'])
+            ->paginate(config('config.limit'));
     }
 
     public function bookmark(User $user, Article $article): Bookmark

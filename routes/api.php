@@ -65,4 +65,8 @@ Route::group(['prefix' => 'user', 'middleware' => 'auth:user'], function()
             Route::post('un-bookmark', [BookmarkController::class, 'unBookmark']);
         });
     });
+
+    Route::group(['prefix' => 'bookmark', 'middleware' => 'auth:user'], function () {
+        Route::get('/', [BookmarkController::class, 'listByUser']);
+    });
 });
