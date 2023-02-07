@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\User;
 
-use Illuminate\Http\Request;
 use App\Repositories\ArticleRepository;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Article\ArticleResource;
@@ -10,6 +9,7 @@ use App\Http\Requests\ArticleStoreRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\JsonResponse;
 use App\Models\Article;
+use App\Http\Requests\ArticleUpdateRequest;
 
 class ArticleController extends Controller
 {
@@ -48,9 +48,15 @@ class ArticleController extends Controller
         return responder()->getSuccess($resource);
     }
 
-    public function update(Request $request, $id)
+    public function update(ArticleUpdateRequest $request, Article $article): JsonResponse
     {
-        //
+        $article = DB::transaction(function () use ($request, $article) {
+            return $this->articleRepository->update($request, $article);
+        });
+
+        $resource = new ArticleResource($article);
+
+        return responder()->getSuccess($resource);
     }
 
     public function destroy(Article $article): JsonResponse

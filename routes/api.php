@@ -36,6 +36,7 @@ Route::group(['prefix' => 'user', 'middleware' => 'auth:user'], function()
         Route::get('/{article}', [ArticleController::class, 'show'])->middleware(['can:show,article']);
         Route::get('/', [ArticleController::class, 'index']);
         Route::post('/', [ArticleController::class, 'store']);
+        Route::put('/{article}', [ArticleController::class, 'update'])->middleware(['can:update,article']);
         Route::delete('/{article}', [ArticleController::class, 'destroy'])->middleware(['can:destroy,article']);
 
         Route::group(['prefix' => '{article}/comment'], function()

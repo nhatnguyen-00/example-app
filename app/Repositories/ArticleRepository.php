@@ -12,6 +12,16 @@ use App\Models\Comment;
 
 class ArticleRepository extends Repository
 {
+
+    protected TagRepository $tagRepository;
+
+    public function __construct(TagRepository $tagRepository)
+    {
+        $this->tagRepository = $tagRepository;
+
+        parent::__construct();
+    }
+
     public function model(): string
     {
         return Article::class;
@@ -28,12 +38,9 @@ class ArticleRepository extends Repository
         $article = $this->model->create($request->only(['title', 'content', 'status', 'author_id']));
 
         $tagsName = $request->get('tags');
+        $this->tagRepository->insertIfNotExists($tagsName);
 
-        /** @var TagRepository $tagRepository */
-        $tagRepository = app(TagRepository::class);
-        $tagRepository->insertIfNotExists($tagsName);
-
-        $tagsId = $tagRepository->findTagByNames($tagsName)->pluck('id');
+        $tagsId = $this->tagRepository->findTagByNames($tagsName)->pluck('id');
         $article->tags()->attach($tagsId);
 
         return $article;
@@ -48,5 +55,20 @@ class ArticleRepository extends Repository
                     ->with('children.children.children');
             }
         ]);
+    }
+
+    public function update(Request $request, Article $article): Article
+    {
+        $article->tags()->detach();
+        $article = $article->fill($request->only(['title', 'content', 'status', 'author_id']));
+        $article->save();
+
+        $tagsName = $request->get('tags');
+        $this->tagRepository->insertIfNotExists($tagsName);
+
+        $tagsId = $this->tagRepository->findTagByNames($tagsName)->pluck('id');
+        $article->tags()->attach($tagsId);
+
+        return $article;
     }
 }
