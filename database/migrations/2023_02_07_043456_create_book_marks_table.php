@@ -13,11 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('votes', function (Blueprint $table) {
+        Schema::create('book_marks', function (Blueprint $table) {
             $table->id();
-            $table->integer('article_id');
             $table->integer('user_id');
-            $table->integer('value');
+            $table->integer('article_id');
+            $table->integer('status');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('votes');
+        Schema::dropIfExists('book_marks');
     }
 };
