@@ -23,8 +23,8 @@ class CommentResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
-        if ($this->relationLoaded('comments')) {
-            $data['comments'] = CommentResource::collection($this->comments);
+        if ($this->relationLoaded('children')) {
+            $data['children'] = self::collection($this->children);
         }
         if ($this->relationLoaded('author')) {
             $data['author'] = new UserResource($this->author);

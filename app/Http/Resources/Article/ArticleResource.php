@@ -5,6 +5,7 @@ namespace App\Http\Resources\Article;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\Tag\TagResource;
 use App\Http\Resources\User\UserResource;
+use App\Http\Resources\Comment\CommentResource;
 
 class ArticleResource extends JsonResource
 {
@@ -30,6 +31,9 @@ class ArticleResource extends JsonResource
         }
         if ($this->relationLoaded('author')) {
             $data['author'] = new UserResource($this->author);
+        }
+        if ($this->relationLoaded('comments')) {
+            $data['comments'] = CommentResource::collection($this->comments);
         }
 
         return $data;

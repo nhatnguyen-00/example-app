@@ -10,6 +10,10 @@ use App\Models\Tag;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use App\Models\Comment;
+use App\Models\Vote;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\Bookmark;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Article extends Model
 {
@@ -38,8 +42,19 @@ class Article extends Model
         return $this->belongsToMany(Tag::class, 'article_tag', 'article_id', 'tag_id');
     }
 
-    public function comments()
+    public function comments(): MorphMany
     {
         return $this->morphMany(Comment::class, 'commentable');
+    }
+
+    public function votes(): HasMany
+    {
+        return $this->hasMany(Vote::class, 'article_id');
+    }
+
+    public function bookmarks()
+    {
+        return $this->hasMany(Bookmark::class, 'article_id');
+
     }
 }

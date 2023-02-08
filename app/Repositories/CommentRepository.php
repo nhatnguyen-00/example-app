@@ -16,7 +16,17 @@ class CommentRepository extends Repository
 
     public function store(Request $request, Article $article): Comment
     {
-        $comment = $article->comments()->create($request->all())->load(['author:id,name,email']);
+        $comment = $article->comments()
+            ->create($request->only(['content', 'author_id', 'parent_id']))
+            ->load(['author:id,name,email']);
+
+        return $comment;
+    }
+
+    public function update(Request $request, Comment $comment): Comment
+    {
+        $comment = $comment->fill($request->only(['content']));
+        $comment->save();
 
         return $comment;
     }
