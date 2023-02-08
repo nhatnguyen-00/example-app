@@ -17,6 +17,7 @@
         </div>
         <form class="mt-8 space-y-6" @submit.prevent="login">
             <input type="hidden" name="remember" value="true" />
+            <alert v-if="errorMess" :error="errorMess"></alert>
             <div class="-space-y-px rounded-md shadow-sm">
                 <div>
                     <label for="email-address" class="sr-only">Email address</label>
@@ -85,6 +86,8 @@
     import { LockClosedIcon } from '@heroicons/vue/20/solid';
     import store from '../store';
     import { useRouter } from 'vue-router';
+    import Alert from '../alert/Alert.vue';
+    import { ref } from '@vue/reactivity';
     const router = useRouter();
 
     const user = {
@@ -92,6 +95,8 @@
         password: '',
         remember: false,
     };
+
+    let errorMess = ref();
 
     function login(ev) {
         ev.preventDefault();
@@ -103,7 +108,7 @@
                 });
             })
             .catch((e) => {
-                console.log(e);
+                errorMess.value = e.response.data.msg;
             });
     }
 </script>

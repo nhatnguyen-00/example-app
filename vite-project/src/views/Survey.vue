@@ -1,14 +1,16 @@
+<script setup lang="ts">
+    import { onMounted, ref } from 'vue';
+    import { hide, show } from 'uspin';
+
+    const targetRef = ref(null);
+</script>
+
 <template>
-    <header class="bg-white shadow">
-        <div class="mx-auto max-w-7xl py-6 px-4 sm:px-6 lg:px-8">
-            <h1 class="text-3xl font-bold tracking-tight text-gray-900">Surveys</h1>
+    <div>
+        <div ref="targetRef" class="demo">hello</div>
+        <div class="demoButton">
+            <button @click="show(targetRef)">show</button>
+            <button @click="hide(targetRef)">hide</button>
         </div>
-    </header>
-    <main>
-        <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-            <div class="px-4 py-6 sm:px-0">
-                content go here
-            </div>
-        </div>
-    </main>
+    </div>
 </template>

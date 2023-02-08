@@ -1,5 +1,6 @@
 import { createStore } from 'vuex';
 import axiosClient from '../axios.js';
+import { hide, show } from 'uspin';
 
 const store = createStore({
     state: {
@@ -11,6 +12,7 @@ const store = createStore({
             },
             token: sessionStorage.getItem('TOKEN'),
         },
+        loading: false,
     },
     getters: {},
     actions: {
@@ -28,18 +30,29 @@ const store = createStore({
                 return data;
             });
         },
+        showLoading: ({ commit }, user) => {
+            commit('showLoading');
+        },
+        hideLoading: ({ commit }, user) => {
+            commit('hideLoading');
+        },
     },
     mutations: {
         logout: (state) => {
             state.user.token = null;
             state.user.data = {};
-            console.log(state);
             sessionStorage.removeItem('TOKEN');
         },
         setUser: (state, userData) => {
             state.user.data = userData.user;
             state.user.token = userData.data.access_token;
             sessionStorage.setItem('TOKEN', state.user.token);
+        },
+        showLoading(state) {
+            state.loading = true;
+        },
+        hideLoading(state) {
+            state.loading = false;
         },
     },
     modules: {},
