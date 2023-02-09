@@ -107,8 +107,6 @@
                     name: 'Dashboard',
                 });
             })
-            .catch((e) => {
-                errorMess.value = e.response.data.msg;
-            });
+            
     }
 </script>

@@ -1,6 +1,5 @@
 import { createStore } from 'vuex';
 import axiosClient from '../axios.js';
-import { hide, show } from 'uspin';
 
 const store = createStore({
     state: {
@@ -18,23 +17,33 @@ const store = createStore({
     actions: {
         register: ({ commit }, user) => {},
         login: ({ commit }, user) => {
-            return axiosClient.post('/login', user).then(({ data }) => {
-                commit('setUser', data);
-                return data;
-            });
+            commit('showLoading');
+            return axiosClient
+                .post('/login', user)
+                .then(({ data }) => {
+                    commit('setUser', data);
+                    commit('hideLoading');
+                    return data;
+                })
+                .catch((e) => {
+                    commit('hideLoading');
+                    errorMess.value = e.response.data.msg;
+                });
         },
 
         logout: ({ commit }, user) => {
-            return axiosClient.post('/logout', user).then(({ data }) => {
-                commit('logout', data);
-                return data;
-            });
-        },
-        showLoading: ({ commit }, user) => {
             commit('showLoading');
-        },
-        hideLoading: ({ commit }, user) => {
-            commit('hideLoading');
+            return axiosClient
+                .post('/logout', user)
+                .then(({ data }) => {
+                    commit('logout', data);
+                    commit('hideLoading');
+                    return data;
+                })
+                .catch((e) => {
+                    commit('hideLoading');
+                    errorMess.value = e.response.data.msg;
+                });
         },
     },
     mutations: {
